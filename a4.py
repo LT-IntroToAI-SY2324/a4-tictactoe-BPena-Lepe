@@ -10,27 +10,51 @@ class TTTBoard:
             represent moves by player 'O' and '*'s are spots no one has yet played on
     """
 
-    pass
     def __init__(self):
-        self.board=["*"]*9
+        self.board=['*']*9
     
     def __str__(self) ->str:
         s=""
         for x in [0,3,6]:
-        s+=self.board[x+0]+" "+self.board[x+1]+" "+self.board[x+2]+"\n"
+            s+=self.board[x+0]+" "+self.board[x+1]+" "+self.board[x+2]+"\n"
         return s
 
-    def make_move(self, pos,player)->bool:
-        if(pos<0 or pos>8 or self.brd[pos]!="*"):
+    def make_move(self,player,pos)->bool:
+        if(pos<0 or pos>8 or self.board[pos]!='*'):
             return False
         self.board[pos]=player
         return True
-
+    def has_won(self,player) ->bool:
+        x=0
+        while x<7:
+            if x!='*' and self.board[x]==player and self.board[x]==self.board[x+1] and self.board[x+1]==self.board[x+2]:
+                return True
+            x+=3
+        x=0
+        while x<3:
+            if x!='*' and self.board[x]==player and self.board[x]==self.board[3+x] and self.board[3+x]==self.board[6+x]:
+                return True
+            x+=1
+        if x!='*' and self.board[x]==player and ((self.board[0]==self.board[4] and self.board[4]==self.board[8]) or (self.board[2]==self.board[4] and self.board[4]==self.board[6]) ):
+            return True
+        else:
+            return False
+    def game_over(self) ->bool:
+        if self.has_won("X") or self.has_won("O"):
+            return True
+        x=0
+        while x<9:
+            if self.board[x]=='*':
+                return False
+        return True
+    def clear(self) -> None:
+        self.board=['*']*9
+        
 def play_tic_tac_toe() -> None:
     """Uses your class to play TicTacToe"""
 
     def is_int(maybe_int: str):
-        """Returns True if val is int, False otherwise
+        """Returns True if val is int, False otherwise6
 
         Args:
             maybe_int - string to check if it's an int
